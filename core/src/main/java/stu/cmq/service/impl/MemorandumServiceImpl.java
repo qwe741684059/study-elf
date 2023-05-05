@@ -70,11 +70,20 @@ public class MemorandumServiceImpl implements MemorandumService {
             int month = memorandum.getMemorandumTime().getMonth().getValue();
 
             int day = memorandum.getMemorandumTime().getDayOfMonth();
+
+            String monthString;
+            String dayString;
             if (month >= 10) {
-                list.add(year+"-"+month+"-"+day);
+                monthString = month+"";
             } else{
-                list.add(year+"-0"+month+"-"+day);
+                monthString = "0" + month;
             }
+            if (day >=10) {
+                dayString = day + "";
+            } else {
+                dayString = "0" + day;
+            }
+            list.add(year + "-" + monthString + "-" + dayString);
 
         }
         return list;

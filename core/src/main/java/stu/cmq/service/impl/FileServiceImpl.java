@@ -66,6 +66,16 @@ public class FileServiceImpl implements FileService {
         file.setServerPath(Objects.requireNonNull(ioFile).getPath());
         file.setReadPath(baseUrl+ ioFile.getName());
 
+        QueryWrapper<File> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("file_name",file.getFileName());
+        queryWrapper.eq("file_type",file.getFileType());
+        queryWrapper.eq("file_path",file.getFilePath());
+        queryWrapper.eq("user_id",file.getUserId());
+        File file1 = fileMapper.selectOne(queryWrapper);
+        if (file1 != null) {
+            FileUtil.del(file1.getServerPath());
+            fileMapper.deleteById(file1);
+        }
         fileMapper.insert(file);
     }
 

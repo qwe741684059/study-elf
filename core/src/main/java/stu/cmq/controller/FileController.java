@@ -35,7 +35,7 @@ public class FileController {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @PutMapping("/updateFile")
+    @PostMapping("/updateFile")
     public ResponseEntity<Object> updateFile(@RequestBody File file) {
         fileService.updateFile(file);
         return new ResponseEntity<>(null, HttpStatus.OK);
