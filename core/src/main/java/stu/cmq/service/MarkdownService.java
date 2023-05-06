@@ -45,4 +45,11 @@ public interface MarkdownService {
      * @param markdown
      */
     void deleteMarkdown(Markdown markdown);
+
+    /**
+     * 上传图片
+     * @param multipartFile
+     * @return String
+     */
+    String uploadImage(MultipartFile multipartFile);
 }

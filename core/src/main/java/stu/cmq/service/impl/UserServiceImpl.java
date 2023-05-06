@@ -13,6 +13,7 @@ import stu.cmq.annotation.properties.FileProperties;
 import stu.cmq.domain.User;
 import stu.cmq.domain.UserRole;
 import stu.cmq.exception.BadRequestException;
+import stu.cmq.exception.EntityExistException;
 import stu.cmq.mapper.RoleMapper;
 import stu.cmq.mapper.UserMapper;
 import stu.cmq.mapper.UserRoleMapper;
@@ -44,6 +45,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertUser(User user) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", user.getUsername());
+        if(userMapper.selectOne(queryWrapper) != null) {
+            throw new EntityExistException(User.class, "username", user.getUsername());
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userMapper.insert(user);
         UserRole userRole = new UserRole();
