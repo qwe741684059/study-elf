@@ -16,6 +16,9 @@ import stu.cmq.service.FileService;
 import stu.cmq.utils.FileUtil;
 import stu.cmq.utils.SecurityUtils;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.util.*;
 
 /**
@@ -48,7 +51,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void uploadFile(MultipartFile multipartFile, String filePath, String userId) {
-        String baseUrl = "http://192.168.31.113:8181/file/";
+        String baseUrl = "http://" + getIpAddress() + ":8181/file/";
         String doc = "doc docx txt pdf";
 
         String fileType = FileUtil.getExtensionName(multipartFile.getOriginalFilename());
@@ -139,6 +142,29 @@ public class FileServiceImpl implements FileService {
         return map;
     }
 
+    public static String getIpAddress() {
+        try {
+            Enumeration<NetworkInterface> allNetInterfaces = NetworkInterface.getNetworkInterfaces();
+            InetAddress ip = null;
+            while (allNetInterfaces.hasMoreElements()) {
+                NetworkInterface netInterface = (NetworkInterface) allNetInterfaces.nextElement();
+                if (netInterface.isLoopback() || netInterface.isVirtual() || !netInterface.isUp()) {
+                    continue;
+                } else {
+                    Enumeration<InetAddress> addresses = netInterface.getInetAddresses();
+                    while (addresses.hasMoreElements()) {
+                        ip = addresses.nextElement();
+                        if (ip != null && ip instanceof Inet4Address) {
+                            return ip.getHostAddress();
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("IP地址获取失败" + e.toString());
+        }
+        return "";
+    }
 
 //    /**
 //     *
